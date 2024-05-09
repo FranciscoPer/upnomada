@@ -2,7 +2,7 @@ const {getTripPlan} = require("../../controllers/tripPlanner/tripPlannerControll
 
 
 const tripPlannerHandler = async (req, res) => {
-  const { days, destination } = req.query; // Asegúrate de que estos parámetros se envíen en la solicitud
+  const { days, destination } = req.query; 
 
   try {
     const tripPlan = await getTripPlan(days, destination);

@@ -7,7 +7,9 @@ const getFlightsHandler = async (req, res) => {
     origin: req.query.origin,
     departureDate: req.query.departureDate,
     returnDate: req.query.returnDate,
-    type: req.query.type
+    type: req.query.type,
+    sortByPrice: req.query.sortByPrice, // 'asc' o 'desc'
+    sortByDepartureDate: req.query.sortByDepartureDate // 'asc' o 'desc'
   };
 
   try {
