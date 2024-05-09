@@ -27,6 +27,9 @@ module.exports = (sequelize) => {
         type: DataTypes.STRING,
         allowNull: false,
         unique: true,
+        validate: {
+          isEmail: true,
+        }
       },
       phone: {
         type: DataTypes.STRING,
@@ -47,6 +50,14 @@ module.exports = (sequelize) => {
         type: DataTypes.STRING,
         allowNull: true,
       },
+      subscriptionStatus: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+      },
+      subscriptionId: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      }
     },
     {
       tableName: 'users',
