@@ -57,6 +57,10 @@ module.exports = (sequelize) => {
       subscriptionId: {
         type: DataTypes.STRING,
         allowNull: true,
+      },
+      stripeCustomerId: { // This field is added to store the Stripe Customer ID
+        type: DataTypes.STRING,
+        allowNull: true,
       }
     },
     {

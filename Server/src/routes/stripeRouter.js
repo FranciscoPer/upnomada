@@ -1,13 +1,11 @@
 const { Router } = require ("express");
-const { createProductHandler } = require('../handlers/stripe/createProductHandler');
-const { createPlanHandler} = require('../handlers/stripe/createPlanHandler')
-const {createSubscriptionHandler} = require ('../handlers/stripe/createSubscriptionHandler')
-const {createCheckoutSessionHandler} = require('../handlers/stripe/checkOutSessionHandler')
-const stripeRouter = Router();
+const { subscriptionHandler } = require('../handlers/stripe/subcriptionHandler');
+const {cancelSubscriptionHandler} = require('../handlers/stripe/cancelSubscriptionHandler')
 
-stripeRouter.post('/products', createProductHandler);
-stripeRouter.post('/plans', createPlanHandler);
-stripeRouter.post('/subscriptions', createSubscriptionHandler);
-stripeRouter.post('/create-checkout-session', createCheckoutSessionHandler);
 
-module.exports = stripeRouter;
+const subscriptionRouter = Router();
+
+subscriptionRouter.post('/', subscriptionHandler);
+subscriptionRouter.post("/cancel-subscription", cancelSubscriptionHandler)
+
+module.exports = subscriptionRouter;
