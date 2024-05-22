@@ -25,9 +25,71 @@ module.exports = (sequelize) => {
         type: DataTypes.STRING,
         allowNull: false
       },
-      departureDates: {
-        type: DataTypes.ARRAY(DataTypes.DATEONLY), // Varias fechas de salida
-        allowNull: false
+      departureDate1: {
+        type: DataTypes.DATEONLY,
+        allowNull: true
+      },
+      urlLink1: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        validate: {
+          isURL: true
+        }
+      },
+      departureDate2: {
+        type: DataTypes.DATEONLY,
+        allowNull: true
+      },
+      urlLink2: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        validate: {
+          isURL: true
+        }
+      },
+      departureDate3: {
+        type: DataTypes.DATEONLY,
+        allowNull: true
+      },
+      urlLink3: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        validate: {
+          isURL: true
+        }
+      },
+      departureDate4: {
+        type: DataTypes.DATEONLY,
+        allowNull: true
+      },
+      urlLink4: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        validate: {
+          isURL: true
+        }
+      },
+      departureDate5: {
+        type: DataTypes.DATEONLY,
+        allowNull: true
+      },
+      urlLink5: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        validate: {
+          isURL: true
+        }
+      },
+      departureDate6: {
+        type: DataTypes.DATEONLY,
+        allowNull: true
+      },
+      urlLink6: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        validate: {
+          isURL: true
+        }
       },
       returnDate: {
         type: DataTypes.DATEONLY,

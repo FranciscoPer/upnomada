@@ -27,7 +27,16 @@ const getFlightsController = async (filters) => {
   }
 
   if (filters.departureDate) {
-    query.where.departureDates = { [Op.contains]: [filters.departureDate] };
+    query.where = {
+      [Op.or]: [
+        { departureDate1: filters.departureDate },
+        { departureDate2: filters.departureDate },
+        { departureDate3: filters.departureDate },
+        { departureDate4: filters.departureDate },
+        { departureDate5: filters.departureDate },
+        { departureDate6: filters.departureDate }
+      ]
+    };
   } else {
     // Si no se especifica una fecha de salida, no filtramos por fechas
   }
@@ -48,7 +57,12 @@ const getFlightsController = async (filters) => {
   }
 
   if (filters.sortByDepartureDate) {
-    query.order.push(['departureDates', filters.sortByDepartureDate]); // 'asc' o 'desc'
+    query.order.push(['departureDate1', filters.sortByDepartureDate]); // 'asc' o 'desc'
+    query.order.push(['departureDate2', filters.sortByDepartureDate]); // 'asc' o 'desc'
+    query.order.push(['departureDate3', filters.sortByDepartureDate]); // 'asc' o 'desc'
+    query.order.push(['departureDate4', filters.sortByDepartureDate]); // 'asc' o 'desc'
+    query.order.push(['departureDate5', filters.sortByDepartureDate]); // 'asc' o 'desc'
+    query.order.push(['departureDate6', filters.sortByDepartureDate]); // 'asc' o 'desc'
   }
 
   try {
@@ -59,5 +73,6 @@ const getFlightsController = async (filters) => {
     throw error;
   }
 };
+
 
 module.exports = {getFlightsController};

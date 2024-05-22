@@ -1,5 +1,6 @@
 const {postFlightController} = require("../../controllers/flights/postFlightsController")
 
+
 const postFlightHandler = async (req, res) => {
   try {
     const flight = await postFlightController(req.body);
@@ -8,5 +9,6 @@ const postFlightHandler = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
   
 module.exports = {postFlightHandler}
