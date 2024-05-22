@@ -30,5 +30,6 @@ sequelize.models = sequelize.models || {};
 module.exports = {
   conn: sequelize,
   User: sequelize.models.User,
-  Flight: sequelize.models.Flight  // Asegúrate de que este nombre coincida con lo que importas
+  Flight: sequelize.models.Flight, // Asegúrate de que este nombre coincida con lo que importas
+  Background: sequelize.models.Background
 };
