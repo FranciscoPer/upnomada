@@ -8,11 +8,8 @@ const getFlightsController = async (filters) => {
     order: []
   };
 
-  // Excluir vuelos con fecha pasada
-  query.where.departureDate = { [Op.gt]: new Date() };
-
   if (filters.flightId) {
-    query.where.flightId = filters.flightId; 
+    query.where.flightId = filters.flightId;
   }
 
   if (filters.destination) {
@@ -30,7 +27,9 @@ const getFlightsController = async (filters) => {
   }
 
   if (filters.departureDate) {
-    query.where.departureDate[Op.eq] = new Date(filters.departureDate);
+    query.where.departureDates = { [Op.contains]: [filters.departureDate] };
+  } else {
+    // Si no se especifica una fecha de salida, no filtramos por fechas
   }
 
   if (filters.returnDate) {
@@ -45,11 +44,11 @@ const getFlightsController = async (filters) => {
 
   // Ordenamiento
   if (filters.sortByPrice) {
-    query.order.push(['price', filters.sortByPrice]); // 'asc' o 'desc'
+    query.order.push(['priceRegular', filters.sortByPrice]); // 'asc' o 'desc'
   }
 
   if (filters.sortByDepartureDate) {
-    query.order.push(['departureDate', filters.sortByDepartureDate]); // 'asc' o 'desc'
+    query.order.push(['departureDates', filters.sortByDepartureDate]); // 'asc' o 'desc'
   }
 
   try {

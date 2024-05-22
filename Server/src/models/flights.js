@@ -13,40 +13,81 @@ module.exports = (sequelize) => {
         type: DataTypes.STRING,
         allowNull: false
       },
+      originAirport: {
+        type: DataTypes.STRING,
+        allowNull: false
+      },
       destination: {
         type: DataTypes.STRING,
         allowNull: false
       },
-      departureDate: {
-        type: DataTypes.DATEONLY, // Cambiado a DATEONLY para almacenar solo la fecha
+      destinationAirport: {
+        type: DataTypes.STRING,
+        allowNull: false
+      },
+      departureDates: {
+        type: DataTypes.ARRAY(DataTypes.DATEONLY), // Varias fechas de salida
         allowNull: false
       },
       returnDate: {
-        type: DataTypes.DATEONLY, // Cambiado a DATEONLY para almacenar solo la fecha
-        allowNull: true  // Puede ser null para vuelos de solo ida
+        type: DataTypes.DATEONLY,
+        allowNull: true
       },
       type: {
         type: DataTypes.ENUM('round-trip', 'one-way'),
         allowNull: false
       },
-      price: {
+      priceRegular: {
         type: DataTypes.FLOAT,
         allowNull: false,
         validate: {
-          isFloat: true,  
-          min: 0          
+          isFloat: true,
+          min: 0
         }
       },
-      imageUrl: {
+      offerPrice: {
+        type: DataTypes.FLOAT,
+        allowNull: true,
+        validate: {
+          isFloat: true,
+          min: 0
+        }
+      },
+      imageUrl1: {
         type: DataTypes.STRING,
-        allowNull: true  
+        allowNull: false,
+        validate: {
+          isURL: true
+        }
+      },
+      imageUrl2: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        validate: {
+          isURL: true
+        }
+      },
+      imageUrl3: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        validate: {
+          isURL: true
+        }
       },
       bookingLink: {
         type: DataTypes.STRING,
-        allowNull: false,  
+        allowNull: false,
         validate: {
-          isURL: true   
+          isURL: true
         }
+      },
+      description: {
+        type: DataTypes.TEXT,
+        allowNull: true
+      },
+      publicationDate: {
+        type: DataTypes.DATEONLY,
+        allowNull: false
       }
     },
     {
