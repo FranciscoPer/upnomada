@@ -27,7 +27,8 @@ const postFlightController = async (flightDetails) => {
     imageUrl3,
     bookingLink,
     description,
-    publicationDate
+    publicationDate,
+    status
   } = flightDetails;
 
   const today = new Date();
@@ -68,7 +69,8 @@ const postFlightController = async (flightDetails) => {
       imageUrl3,
       bookingLink,
       description,
-      publicationDate
+      publicationDate,
+      status
     });
     return newFlight;
   } catch (error) {

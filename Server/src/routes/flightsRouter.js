@@ -10,7 +10,7 @@ const flightsRouter = Router();
 flightsRouter.post("/", postFlightHandler)
 flightsRouter.get('/', getFlightsHandler)
 flightsRouter.delete('/:id', deleteFlightHandler);
-flightsRouter.put('/', putFlightHandler)
+flightsRouter.put('/:id', putFlightHandler)
 
 
 module.exports = flightsRouter;

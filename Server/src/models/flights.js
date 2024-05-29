@@ -15,7 +15,7 @@ module.exports = (sequelize) => {
       },
       originAirport: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: true
       },
       destination: {
         type: DataTypes.STRING,
@@ -23,7 +23,7 @@ module.exports = (sequelize) => {
       },
       destinationAirport: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: true
       },
       departureDate1: {
         type: DataTypes.DATEONLY,
@@ -136,19 +136,16 @@ module.exports = (sequelize) => {
           isURL: true
         }
       },
-      bookingLink: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        validate: {
-          isURL: true
-        }
-      },
       description: {
         type: DataTypes.TEXT,
         allowNull: true
       },
       publicationDate: {
         type: DataTypes.DATEONLY,
+        allowNull: false
+      },
+      status: {
+        type: DataTypes.STRING,
         allowNull: false
       }
     },
