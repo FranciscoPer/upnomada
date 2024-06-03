@@ -7,6 +7,8 @@ const tripRouter = require("./tripRouter")
 const stripeRouter = require("./stripeRouter")
 const webhookRouter = require('./webhookRouter');
 const backgroundRouter = require("./backgroundRouter")
+const itineraryRouter = require("./itineraryRouter"); // Importar la nueva ruta
+
 
 const router = Router();
 
@@ -17,6 +19,7 @@ router.use("/trip", tripRouter)
 router.use("/stripe", stripeRouter)
 router.use('/webhook', webhookRouter);
 router.use("/background", backgroundRouter);
+router.use("/itineraries", itineraryRouter);
 
 
 

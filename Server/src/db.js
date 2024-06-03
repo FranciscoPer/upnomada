@@ -10,7 +10,8 @@ const sequelize = new Sequelize('upnomada', 'postgres', '1234', {
 
 const basename = path.basename(__filename);
 const modelDefiners = [
-  require('./models/user')
+  require('./models/user'),
+  require('./models/itinerary')
 ];
 
 fs.readdirSync(path.join(__dirname, '/models'))
@@ -21,6 +22,10 @@ fs.readdirSync(path.join(__dirname, '/models'))
     const modelDefiner = require(path.join(__dirname, '/models', file));
     modelDefiner(sequelize);
   });
+  const { User, Itinerary } = sequelize.models;
+
+User.hasMany(Itinerary, { foreignKey: 'userId' });
+Itinerary.belongsTo(User, { foreignKey: 'userId' });
   console.log(sequelize.models); 
 
 sequelize.models = sequelize.models || {};
@@ -30,6 +35,7 @@ sequelize.models = sequelize.models || {};
 module.exports = {
   conn: sequelize,
   User: sequelize.models.User,
+  Itinerary: sequelize.models.Itinerary,
   Flight: sequelize.models.Flight, // Asegúrate de que este nombre coincida con lo que importas
   Background: sequelize.models.Background
 };

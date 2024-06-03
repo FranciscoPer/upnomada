@@ -1,6 +1,7 @@
+const { User, Itinerary } = require('../../db');
 const axios = require("axios")
 
-const getTripPlan = async (days, destination) => {
+const getTripPlan = async (days, destination, userId) => {
   const options = {
     method: 'GET',
     url: 'https://ai-trip-planner.p.rapidapi.com/',
@@ -13,11 +14,20 @@ const getTripPlan = async (days, destination) => {
 
   try {
     const response = await axios.request(options);
-    return response.data;
+
+    // Guarda el itinerario en la base de datos
+    const itinerary = await Itinerary.create({
+      days,
+      destination,
+      details: response.data,
+      userId
+    });
+
+    return itinerary;
   } catch (error) {
     console.error("Error fetching trip plan:", error);
     throw error;
   }
 };
 
-module.exports = {getTripPlan}
+module.exports = { getTripPlan };
