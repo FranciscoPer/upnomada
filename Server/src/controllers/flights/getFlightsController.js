@@ -27,18 +27,18 @@ const getFlightsController = async (filters) => {
   }
 
   if (filters.departureDate) {
+    const departureDate = new Date(filters.departureDate);
     query.where = {
+      ...query.where,
       [Op.or]: [
-        { departureDate1: filters.departureDate },
-        { departureDate2: filters.departureDate },
-        { departureDate3: filters.departureDate },
-        { departureDate4: filters.departureDate },
-        { departureDate5: filters.departureDate },
-        { departureDate6: filters.departureDate }
+        { departureDate1: departureDate },
+        { departureDate2: departureDate },
+        { departureDate3: departureDate },
+        { departureDate4: departureDate },
+        { departureDate5: departureDate },
+        { departureDate6: departureDate }
       ]
     };
-  } else {
-    // Si no se especifica una fecha de salida, no filtramos por fechas
   }
 
   if (filters.returnDate) {
@@ -57,12 +57,14 @@ const getFlightsController = async (filters) => {
   }
 
   if (filters.sortByDepartureDate) {
-    query.order.push(['departureDate1', filters.sortByDepartureDate]); // 'asc' o 'desc'
-    query.order.push(['departureDate2', filters.sortByDepartureDate]); // 'asc' o 'desc'
-    query.order.push(['departureDate3', filters.sortByDepartureDate]); // 'asc' o 'desc'
-    query.order.push(['departureDate4', filters.sortByDepartureDate]); // 'asc' o 'desc'
-    query.order.push(['departureDate5', filters.sortByDepartureDate]); // 'asc' o 'desc'
-    query.order.push(['departureDate6', filters.sortByDepartureDate]); // 'asc' o 'desc'
+    query.order.push([Sequelize.literal(`GREATEST(
+      CASE WHEN "departureDate1" IS NOT NULL THEN 1 ELSE 0 END,
+      CASE WHEN "departureDate2" IS NOT NULL THEN 2 ELSE 0 END,
+      CASE WHEN "departureDate3" IS NOT NULL THEN 3 ELSE 0 END,
+      CASE WHEN "departureDate4" IS NOT NULL THEN 4 ELSE 0 END,
+      CASE WHEN "departureDate5" IS NOT NULL THEN 5 ELSE 0 END,
+      CASE WHEN "departureDate6" IS NOT NULL THEN 6 ELSE 0 END
+    )`), filters.sortByDepartureDate]); // 'asc' o 'desc'
   }
 
   try {
@@ -74,5 +76,4 @@ const getFlightsController = async (filters) => {
   }
 };
 
-
-module.exports = {getFlightsController};
+module.exports = { getFlightsController };
