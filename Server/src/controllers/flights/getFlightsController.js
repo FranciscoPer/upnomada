@@ -27,7 +27,7 @@ const getFlightsController = async (filters) => {
   }
 
   if (filters.departureDate) {
-    const departureDate = new Date(filters.departureDate);
+    const departureDate = new Date(filters.departureDate).toISOString().split('T')[0]; // Ensure correct format
     query.where = {
       ...query.where,
       [Op.or]: [
@@ -43,7 +43,7 @@ const getFlightsController = async (filters) => {
 
   if (filters.returnDate) {
     query.where.returnDate = {
-      [Op.eq]: new Date(filters.returnDate)
+      [Op.eq]: new Date(filters.returnDate).toISOString().split('T')[0] // Ensure correct format
     };
   }
 
@@ -57,14 +57,12 @@ const getFlightsController = async (filters) => {
   }
 
   if (filters.sortByDepartureDate) {
-    query.order.push([Sequelize.literal(`GREATEST(
-      CASE WHEN "departureDate1" IS NOT NULL THEN 1 ELSE 0 END,
-      CASE WHEN "departureDate2" IS NOT NULL THEN 2 ELSE 0 END,
-      CASE WHEN "departureDate3" IS NOT NULL THEN 3 ELSE 0 END,
-      CASE WHEN "departureDate4" IS NOT NULL THEN 4 ELSE 0 END,
-      CASE WHEN "departureDate5" IS NOT NULL THEN 5 ELSE 0 END,
-      CASE WHEN "departureDate6" IS NOT NULL THEN 6 ELSE 0 END
-    )`), filters.sortByDepartureDate]); // 'asc' o 'desc'
+    query.order.push(['departureDate1', filters.sortByDepartureDate]); // 'asc' o 'desc'
+    query.order.push(['departureDate2', filters.sortByDepartureDate]);
+    query.order.push(['departureDate3', filters.sortByDepartureDate]);
+    query.order.push(['departureDate4', filters.sortByDepartureDate]);
+    query.order.push(['departureDate5', filters.sortByDepartureDate]);
+    query.order.push(['departureDate6', filters.sortByDepartureDate]);
   }
 
   try {
