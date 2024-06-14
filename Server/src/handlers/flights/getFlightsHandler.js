@@ -5,6 +5,8 @@ const getFlightsHandler = async (req, res) => {
     flightId: req.query.flightId,
     destination: req.query.destination,
     origin: req.query.origin,
+    destinationAirport: req.query.destinationAirport,
+    originAirport: req.query.originAirport,
     departureDate: req.query.departureDate,
     returnDate: req.query.returnDate,
     type: req.query.type,

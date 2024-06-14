@@ -2,6 +2,11 @@ const { Flight } = require('../../db');
 const Sequelize = require('sequelize');
 const { Op } = Sequelize;
 
+
+function removeAccents(str) {
+  return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+}
+
 const getFlightsController = async (filters) => {
   const query = {
     where: {},
@@ -13,37 +18,56 @@ const getFlightsController = async (filters) => {
   }
 
   if (filters.destination) {
-    query.where.destination = Sequelize.where(
-      Sequelize.fn('lower', Sequelize.col('destination')),
-      Sequelize.fn('lower', filters.destination)
-    );
+    const normalizedDestination = removeAccents(filters.destination.toLowerCase());
+    query.where.destination = {
+      [Op.iLike]: `%${normalizedDestination}%`
+    };
+    console.log("Destination filter applied:", query.where.destination);
   }
 
   if (filters.origin) {
-    query.where.origin = Sequelize.where(
-      Sequelize.fn('lower', Sequelize.col('origin')),
-      Sequelize.fn('lower', filters.origin)
-    );
+    const normalizedOrigin = removeAccents(filters.origin.toLowerCase());
+    query.where.origin = {
+      [Op.iLike]: `%${normalizedOrigin}%`
+    };
+    console.log("Origin filter applied:", query.where.origin);
+  }
+
+  if (filters.originAirport) {
+    const normalizedOriginAirport = removeAccents(filters.originAirport.toLowerCase());
+    query.where.originAirport = {
+      [Op.iLike]: `%${normalizedOriginAirport}%`
+    };
+  }
+
+  if (filters.destinationAirport) {
+    const normalizedDestinationAirport = removeAccents(filters.destinationAirport.toLowerCase());
+    query.where.destinationAirport = {
+      [Op.iLike]: `%${normalizedDestinationAirport}%`
+    };
   }
 
   if (filters.departureDate) {
-    const departureDate = new Date(filters.departureDate).toISOString().split('T')[0]; // Ensure correct format
+    const departureDate = new Date(filters.departureDate);
+    const departureDateUTC = departureDate.toISOString().split('T')[0];
+
     query.where = {
       ...query.where,
       [Op.or]: [
-        { departureDate1: departureDate },
-        { departureDate2: departureDate },
-        { departureDate3: departureDate },
-        { departureDate4: departureDate },
-        { departureDate5: departureDate },
-        { departureDate6: departureDate }
+        { departureDate1: departureDateUTC },
+        { departureDate2: departureDateUTC },
+        { departureDate3: departureDateUTC },
+        { departureDate4: departureDateUTC },
+        { departureDate5: departureDateUTC },
+        { departureDate6: departureDateUTC }
       ]
     };
+    console.log("Departure date filter applied:", query.where);
   }
 
   if (filters.returnDate) {
     query.where.returnDate = {
-      [Op.eq]: new Date(filters.returnDate).toISOString().split('T')[0] // Ensure correct format
+      [Op.eq]: new Date(filters.returnDate).toISOString().split('T')[0]
     };
   }
 
@@ -53,11 +77,11 @@ const getFlightsController = async (filters) => {
 
   // Ordenamiento
   if (filters.sortByPrice) {
-    query.order.push(['priceRegular', filters.sortByPrice]); // 'asc' o 'desc'
+    query.order.push(['priceRegular', filters.sortByPrice]);
   }
 
   if (filters.sortByDepartureDate) {
-    query.order.push(['departureDate1', filters.sortByDepartureDate]); // 'asc' o 'desc'
+    query.order.push(['departureDate1', filters.sortByDepartureDate]);
     query.order.push(['departureDate2', filters.sortByDepartureDate]);
     query.order.push(['departureDate3', filters.sortByDepartureDate]);
     query.order.push(['departureDate4', filters.sortByDepartureDate]);
@@ -65,8 +89,11 @@ const getFlightsController = async (filters) => {
     query.order.push(['departureDate6', filters.sortByDepartureDate]);
   }
 
+  console.log("Final query:", query);
+
   try {
     const flights = await Flight.findAll(query);
+    console.log("Query result:", flights);
     return flights;
   } catch (error) {
     console.error("Error en getFlightsController:", error);
