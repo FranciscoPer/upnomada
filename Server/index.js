@@ -1,6 +1,6 @@
 const { conn } = require("./src/db");
 const server = require('./src/server')
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 3001;
 
 conn.sync({ force: false }).then(() => {
     server.listen(PORT, () => {
