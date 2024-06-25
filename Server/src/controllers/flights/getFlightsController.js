@@ -7,6 +7,7 @@ function removeAccents(str) {
   return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 }
 
+
 const getFlightsController = async (filters) => {
   const query = {
     where: {},
@@ -48,20 +49,39 @@ const getFlightsController = async (filters) => {
   }
 
   if (filters.departureDate) {
-    const departureDate = new Date(filters.departureDate);
-    const departureDateUTC = departureDate.toISOString().split('T')[0];
+    if (filters.departureDate.startsWith('month-')) {
+      // Filtrar por mes
+      const month = filters.departureDate.split('-')[1].padStart(2, '0');
+      
+      query.where = {
+        ...query.where,
+        [Op.or]: [
+          Sequelize.where(Sequelize.literal(`EXTRACT(MONTH FROM "departureDate1")`), month),
+          Sequelize.where(Sequelize.literal(`EXTRACT(MONTH FROM "departureDate2")`), month),
+          Sequelize.where(Sequelize.literal(`EXTRACT(MONTH FROM "departureDate3")`), month),
+          Sequelize.where(Sequelize.literal(`EXTRACT(MONTH FROM "departureDate4")`), month),
+          Sequelize.where(Sequelize.literal(`EXTRACT(MONTH FROM "departureDate5")`), month),
+          Sequelize.where(Sequelize.literal(`EXTRACT(MONTH FROM "departureDate6")`), month)
+        ]
+      };
+    } else {
+      // Convertir la fecha de salida a UTC
+      const departureDate = new Date(filters.departureDate);
+      const departureDateUTC = departureDate.toISOString().split('T')[0];
 
-    query.where = {
-      ...query.where,
-      [Op.or]: [
-        { departureDate1: departureDateUTC },
-        { departureDate2: departureDateUTC },
-        { departureDate3: departureDateUTC },
-        { departureDate4: departureDateUTC },
-        { departureDate5: departureDateUTC },
-        { departureDate6: departureDateUTC }
-      ]
-    };
+      // Utilizar la fecha de salida en UTC en la consulta
+      query.where = {
+        ...query.where,
+        [Op.or]: [
+          { departureDate1: departureDateUTC },
+          { departureDate2: departureDateUTC },
+          { departureDate3: departureDateUTC },
+          { departureDate4: departureDateUTC },
+          { departureDate5: departureDateUTC },
+          { departureDate6: departureDateUTC }
+        ]
+      };
+    }
     console.log("Departure date filter applied:", query.where);
   }
 
@@ -100,5 +120,7 @@ const getFlightsController = async (filters) => {
     throw error;
   }
 };
+
+module.exports = { getFlightsController };
 
 module.exports = { getFlightsController };
