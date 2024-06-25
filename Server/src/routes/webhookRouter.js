@@ -5,7 +5,7 @@ const {webhookHandler} = require('../handlers/stripe/webhookhHandler');
 const webhookRouter = Router();
 
 webhookRouter.post('/', express.raw({type: 'application/json'}), (req, res, next) => {
-    console.log('Webhook received:', req.body); // Esto te ayudará a ver el payload crudo que Stripe envía
+    console.log('Webhook received:', req.body); // Log para ver el payload crudo que Stripe envía
     next();
 }, webhookHandler);
 

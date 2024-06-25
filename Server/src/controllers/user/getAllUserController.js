@@ -8,59 +8,70 @@ function removeAccents(str) {
 
 const getAllUserController = async (filters) => {
   const query = {
-    where: {},
-    order: []
+      where: {},
+      order: []
   };
 
+  // Aplicar filtros y ordenamientos
   if (filters.email) {
-    query.where.email = {
-      [Op.iLike]: `%${removeAccents(filters.email.toLowerCase())}%`
-    };
+      query.where.email = {
+          [Op.iLike]: `%${removeAccents(filters.email.toLowerCase())}%`
+      };
   }
 
   if (filters.name) {
-    query.where.name = {
-      [Op.iLike]: `%${removeAccents(filters.name.toLowerCase())}%`
-    };
+      query.where.name = {
+          [Op.iLike]: `%${removeAccents(filters.name.toLowerCase())}%`
+      };
   }
 
   if (filters.lastName) {
-    query.where.lastName = {
-      [Op.iLike]: `%${removeAccents(filters.lastName.toLowerCase())}%`
-    };
+      query.where.lastName = {
+          [Op.iLike]: `%${removeAccents(filters.lastName.toLowerCase())}%`
+      };
   }
 
   if (filters.isAdmin !== undefined) {
-    query.where.isAdmin = filters.isAdmin;
+      query.where.isAdmin = filters.isAdmin;
   }
 
   if (filters.subscriptionStatus !== undefined) {
-    query.where.subscriptionStatus = filters.subscriptionStatus;
+      query.where.subscriptionStatus = filters.subscriptionStatus;
   }
 
-  if (filters.dobMonth) {
-    const month = filters.dobMonth.padStart(2, '0');
-    query.where = {
-      ...query.where,
-      [Op.and]: [
-        Sequelize.where(Sequelize.fn('EXTRACT', Sequelize.literal('MONTH FROM "dob"')), month)
-      ]
-    };
+  if (filters.dob) {
+      if (filters.dob.startsWith('month-')) {
+          const month = filters.dob.split('-')[1].padStart(2, '0');
+          query.where = {
+              ...query.where,
+              [Op.or]: [
+                  Sequelize.where(Sequelize.fn('EXTRACT', Sequelize.literal('MONTH FROM "dob"')), month)
+              ]
+          };
+      } else {
+          query.where.dob = {
+              [Op.eq]: new Date(filters.dob).toISOString().split('T')[0]
+          };
+      }
   }
 
   if (filters.sortByName) {
-    query.order.push(['name', filters.sortByName]);
+      query.order.push(['name', filters.sortByName]);
   }
 
   if (filters.sortByLastName) {
-    query.order.push(['lastName', filters.sortByLastName]);
+      query.order.push(['lastName', filters.sortByLastName]);
   }
 
+  console.log("Query:", query);
+
   try {
-    const users = await User.findAll(query);
-    return users;
+      const users = await User.findAll(query);
+      console.log("Users found:", users);
+      return users;
   } catch (error) {
-    throw new Error("Failed to retrieve users");
+      console.error("Error in getAllUserController:", error);
+      throw new Error("Failed to retrieve users");
   }
 };
 
